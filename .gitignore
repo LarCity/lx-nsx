@@ -12,3 +12,7 @@
 
 # Intellij IDEs
 /.idea/
+
+# Ignore development configs
+/lib/config/**/*.yml
+/lib/config/**/*.yaml

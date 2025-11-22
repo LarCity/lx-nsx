@@ -1,0 +1,9 @@
+shared:
+  - domain: larcity.tech
+    content: 0.dead
+    type: A
+    ttl: 3600
+  - domain: larcity.tech
+    content: 1.dead
+    type: A
+    ttl: 3600

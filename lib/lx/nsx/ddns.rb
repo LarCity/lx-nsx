@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module Lx
   module Nsx
     class Ddns
-      def self.sync
-        "Synchronizing DDNS records..."
+      class << self
+        def sync
+          "Synchronizing DDNS records..."
+        end
+
+        def config(key: :active, path:)
+          YAML.load_file(File.join(path, "#{key}.yml"))
+        end
       end
     end
   end
