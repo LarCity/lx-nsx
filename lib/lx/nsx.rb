@@ -1,4 +1,5 @@
 require "lx/nsx/version"
+require "lx/nsx/ddns"
 
 module Lx
   module Nsx

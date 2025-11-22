@@ -1,19 +1,9 @@
 # frozen_string_literal: true
 
-require 'rspec'
-
-RSpec.describe 'Lx::Nsx::Ddns' do
-  before do
-    # Do nothing
-  end
-
-  after do
-    # Do nothing
-  end
-
-  context 'when condition' do
-    it 'succeeds' do
-      pending 'Not implemented'
+RSpec.describe Lx::Nsx::Ddns do
+  describe ".sync" do
+    it "returns synchronization message" do
+      expect(Lx::Nsx::Ddns.sync).to eq("Synchronizing DDNS records...")
     end
   end
 end
