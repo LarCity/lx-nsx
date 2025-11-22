@@ -4,9 +4,13 @@ PATH
     lx-nsx (0.1.0)
       activesupport (~> 5.2.2)
       awesome_print
+      dry-types (~> 1.8)
       faraday (~> 2.13)
       faraday-retry
+      highline (~> 3.1)
       json
+      open3
+      ostruct
       thor
       uri
       yaml
@@ -25,6 +29,7 @@ GEM
       cucumber (>= 8.0, < 11.0)
       rspec-expectations (>= 3.4, < 5.0)
       thor (~> 1.0)
+    ast (2.4.3)
     awesome_print (1.9.2)
     base64 (0.3.0)
     bigdecimal (3.3.1)
@@ -57,6 +62,25 @@ GEM
     cucumber-messages (27.2.0)
     cucumber-tag-expressions (8.0.0)
     diff-lcs (1.6.2)
+    dry-core (1.1.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
+    dry-inflector (1.2.0)
+    dry-logic (1.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-types (1.8.3)
+      bigdecimal (~> 3.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
+    faker (3.5.2)
+      i18n (>= 1.8.11, < 2)
     faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -76,9 +100,14 @@ GEM
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
+    highline (3.1.2)
+      reline
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    io-console (0.8.1)
     json (2.16.0)
+    language_server-protocol (3.17.0.5)
+    lint_roller (1.1.0)
     logger (1.7.0)
     memoist3 (1.0.0)
     mini_mime (1.1.5)
@@ -86,7 +115,19 @@ GEM
     multi_test (1.1.0)
     net-http (0.8.0)
       uri (>= 0.11.1)
+    open3 (0.2.1)
+    ostruct (0.6.3)
+    parallel (1.27.0)
+    parser (3.3.10.0)
+      ast (~> 2.4.1)
+      racc
+    prism (1.6.0)
+    racc (1.8.1)
+    rainbow (3.1.1)
     rake (10.5.0)
+    regexp_parser (2.11.3)
+    reline (0.6.3)
+      io-console (~> 0.5)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -100,6 +141,25 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.6)
+    rubocop (1.81.7)
+      json (~> 2.3)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.1.0)
+      parallel (~> 1.10)
+      parser (>= 3.3.0.2)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 2.9.3, < 3.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 4.0)
+    rubocop-ast (1.48.0)
+      parser (>= 3.3.7.2)
+      prism (~> 1.4)
+    rubocop-performance (1.26.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
+    ruby-progressbar (1.13.0)
     sys-uname (1.4.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
@@ -107,8 +167,12 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.11)
       thread_safe (~> 0.1)
+    unicode-display_width (3.2.0)
+      unicode-emoji (~> 4.1)
+    unicode-emoji (4.1.0)
     uri (1.1.1)
     yaml (0.4.0)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -127,9 +191,12 @@ DEPENDENCIES
   aruba
   bundler (>= 1.17)
   cucumber
+  faker
   lx-nsx!
   rake (~> 10.0)
   rspec (~> 3.0)
+  rubocop
+  rubocop-performance
 
 BUNDLED WITH
    2.7.2
