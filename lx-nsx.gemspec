@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport', '~> 5.2.2'
   spec.add_dependency 'awesome_print'
   spec.add_dependency 'dry-types', '~> 1.8'
+  spec.add_dependency 'erb'
   spec.add_dependency 'faraday', '~> 2.13'
   spec.add_dependency 'faraday-retry'
   spec.add_dependency 'highline', '~> 3.1'

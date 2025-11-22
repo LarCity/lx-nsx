@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
+require 'lar_city/cli/core_cmd'
 require 'yaml'
-require 'thor'
 
 module Lx
   module Nsx
-    class Ddns < Thor
+    class Ddns < ::LarCity::CLI::CoreCmd
       desc 'sync', 'Synchronize DDNS records from a YAML configuration file'
       def sync
-        say 'Synchronizing DDNS records...'
+        say_info 'Synchronizing DDNS records...'
       end
 
       no_commands do
-        def config(key: :active, path:)
+        def config(path:, key: :active)
           YAML.load_file(File.join(path, "#{key}.yml"))
         end
       end
