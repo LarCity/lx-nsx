@@ -1,0 +1,28 @@
+shared:
+  - domain: larcity.dev
+    content: alpha
+    type: A
+    ttl: 3600
+  - domain: larcity.tech
+    content: beta
+    type: A
+    ttl: 3600
+  - domain: larcity.business
+    content: www2
+    type: A
+    ttl: 3600
+
+test:
+  - domain: fake.app
+    content: staging
+    type: A
+    ttl: 3600
+  - domain: fake.app
+    content: production
+    type: A
+    ttl: 3600
+  - domain: fake.app
+    content: mail
+    priority: 10
+    type: MX
+    ttl: 3600

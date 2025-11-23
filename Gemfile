@@ -9,6 +9,7 @@ gemspec
 group :development, :test do
   gem 'aruba'
   gem 'bundler', '>= 1.17'
+  gem 'climate_control'
   gem 'cucumber'
   gem 'faker'
   gem 'rake', '~> 10.0'

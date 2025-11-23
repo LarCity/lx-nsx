@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "lx/nsx"
+require "support/with_modified_env"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
