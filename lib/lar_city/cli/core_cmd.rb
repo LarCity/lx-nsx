@@ -6,6 +6,7 @@ require 'lar_city/cli/utils/operating_system_detectable'
 require 'lar_city/cli/utils'
 require 'lar_city/cli/interruptible'
 require 'lar_city/cli/runnable'
+require 'lx/nsx/utils'
 
 module LarCity
   module CLI

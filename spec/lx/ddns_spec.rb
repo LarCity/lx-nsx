@@ -11,7 +11,7 @@ module Lx
 
       describe '.config' do
         let(:default_key) { :active }
-        let(:custom_path) { Lx::Nsx.base_path 'spec/fixtures/ddns' }
+        let(:custom_path) { Lx::Nsx::Utils.base_path 'spec/fixtures/ddns' }
         let(:custom_key) { :retired }
 
         before do
