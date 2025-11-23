@@ -4,16 +4,16 @@ require 'cucumber/rspec/doubles'
 require 'fileutils'
 require 'lx/nsx/utils'
 
-Given(/^(?:a|the) YAML config file named "([^"]*)" with:$/) do |file_name, _file_content|
+Given(/^(?:a|the) YAML config file named "([^"]*)" with:$/) do |file_name, file_content|
   RSpec::Mocks.with_temporary_scope do
     # allow(File).to receive(:exist?).with(file_name).and_return(true)
     # allow(Dir).to receive(:exist?).with(File.dirname(file_name)).and_return(true)
     unless file_name.start_with?('/')
-      target_spec_file = File.join(Lx::Nsx::Utils.spec_path, file_name)
+      target_spec_file = File.join(Lx::Nsx::Utils.spec_path(tmp: true), file_name)
       unless File.exist?(target_spec_file)
         FileUtils.mkdir_p(File.dirname(target_spec_file), verbose: true)
-        FileUtils.touch(target_spec_file, verbose: true)
-        File.write(target_spec_file, _file_content)
+        # FileUtils.touch(target_spec_file, verbose: true)
+        File.write(target_spec_file, file_content)
       end
     end
   end
