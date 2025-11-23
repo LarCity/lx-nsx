@@ -8,10 +8,12 @@ module Lx
     class Ddns < ::LarCity::CLI::CoreCmd
       attr_reader :config_path
 
+      Utils.setup_config_paths
+
       option :config,
              type: :string,
              aliases: '-c',
-             default: Lx::Nsx::Utils.base_path('lib/config/ddns/active.yml'),
+             default: Utils.base_path('lib/config/ddns/active.yml'),
              desc: 'Path to DDNS configuration files',
              required: true
       option :protocol,
@@ -42,22 +44,22 @@ module Lx
           # Get directory from provided path
           path = dir_or_file_path.match?(/\.ya?ml$/) ? File.dirname(dir_or_file_path) : dir_or_file_path
           # Set config path based on whether absolute or relative path is provided
-          @config_path = infer_resource_path(path)
+          @config_path = Utils.infer_resource_path path
         end
 
-        def infer_resource_path(relative_path)
-          return relative_path if Dir.exist?(relative_path) || File.exist?(relative_path)
+        # @deprecated Use Lx::Nsx::Utils.infer_resource_path instead
+        def infer_resource_path(resource_path)
+          return resource_path if Dir.exist?(resource_path) || File.exist?(resource_path)
 
-          inferred_path = relative_path.start_with?('/') ? relative_path : Lx::Nsx::Utils.base_path(relative_path)
+          inferred_path = resource_path.start_with?('/') ? resource_path : Lx::Nsx::Utils.base_path(resource_path)
           return inferred_path if Dir.exist?(inferred_path) || File.exist?(inferred_path)
 
-          raise "DDNS configuration path not found: #{relative_path}"
+          raise "DDNS configuration path not found: #{resource_path}"
         end
 
         def load_config(key: :active)
-          shared, for_env =
-            YAML.load_file(File.join(config_path, "#{key}.yml")).values_at 'shared', detected_environment
-          (shared || []) + (for_env || [])
+          say_debug "Loading DDNS config file for key: #{key} at path: #{config_path}"
+          Utils.env_config(File.join(config_path, "#{key}.yml"), env: detected_environment)
         end
       end
     end

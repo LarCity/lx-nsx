@@ -17,3 +17,6 @@
 /lib/config/**/*.yml
 /lib/config/**/*.yaml
 !/lib/config/**/*.example.yml
+
+# Ignore temporary spec files
+/spec/tmp/

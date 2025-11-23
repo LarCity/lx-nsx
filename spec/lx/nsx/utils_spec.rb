@@ -16,7 +16,7 @@ module Lx
 
         let(:credentials_path) { described_class.base_path('config/credentials.yml.erb') }
         let(:credentials_content) do
-          <<~ERB
+          <<~YML
             ---
             shared:
               openai:
@@ -27,7 +27,7 @@ module Lx
             production:
               digitalocean:
                 api_key: <%= ENV['PROD_API_KEY'] || 'default_prod_key' %>
-          ERB
+          YML
         end
 
         before do
@@ -110,6 +110,62 @@ module Lx
             it 'returns RUBY_ENV' do
               expect(described_class.detected_environment).to eq(ruby_env)
             end
+          end
+        end
+      end
+
+      describe '.env_config' do
+        let(:example_config_path) { described_class.base_path('lib/config/ddns/active.example.yml') }
+        let(:example_template_config_path) { described_class.base_path('lib/config/ddns/active.example.yml.erb') }
+
+        around do |example|
+          with_modified_env('RAILS_ENV' => nil, 'RUBY_ENV' => 'test') { example.run }
+        end
+
+        context 'when template is false' do
+          subject(:config) do
+            described_class.env_config(example_config_path, template: false)
+          end
+
+          it { expect(config.size).to eq(5) }
+
+          context 'with shared records' do
+            it { should include('content' => 'alpha', 'domain' => 'larcity.dev', 'type' => 'A', 'ttl' => 3600) }
+            it { should include('content' => 'beta', 'domain' => 'larcity.tech', 'type' => 'A', 'ttl' => 3600) }
+          end
+
+          context 'with test environment records' do
+            it { should include('content' => 'staging', 'domain' => 'fake.app', 'type' => 'A', 'ttl' => 3600) }
+            it { should include('content' => 'production', 'domain' => 'fake.app', 'type' => 'A', 'ttl' => 3600) }
+            it { should include('content' => 'mail', 'domain' => 'fake.app', 'type' => 'MX', 'priority' => 10, 'ttl' => 3600) }
+          end
+        end
+
+        context 'when template is true' do
+          subject(:config) do
+            described_class.env_config(example_template_config_path, template: true)
+          end
+
+          around do |example|
+            with_modified_env(
+              'TEST_DEV_DOMAIN' => 'mock.dev',
+              'TEST_TECH_DOMAIN' => 'mock.tech',
+              'TEST_FAKE_DOMAIN' => 'fake.biz'
+            ) do
+              example.run
+            end
+          end
+
+          it { expect(config.size).to eq(4) }
+
+          context 'with shared records' do
+            it { should include('content' => 'alpha', 'domain' => 'mock.dev', 'type' => 'A', 'ttl' => 3600) }
+            it { should include('content' => 'beta', 'domain' => 'mock.tech', 'type' => 'A', 'ttl' => 3600) }
+          end
+
+          context 'with test environment records' do
+            it { should include('content' => 'staging', 'domain' => 'fake.biz', 'type' => 'A', 'ttl' => 3600) }
+            it { should include('content' => 'mail', 'domain' => 'fake.biz', 'type' => 'MX', 'priority' => 10, 'ttl' => 3600) }
           end
         end
       end

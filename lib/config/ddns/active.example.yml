@@ -7,10 +7,6 @@ shared:
     content: beta
     type: A
     ttl: 3600
-  - domain: larcity.business
-    content: www2
-    type: A
-    ttl: 3600
 
 test:
   - domain: fake.app

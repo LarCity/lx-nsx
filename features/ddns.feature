@@ -4,7 +4,7 @@ Feature: Nsx
   I want to be able to send DDNS updates via a dockerized ddclient service on a Synology NAS device
 
   Scenario: Update DDNS via ddclient Docker on Synology NAS
-    Given a YAML config file named "spec/fixtures/lar_city/ddns/active.yml" with:
+    Given a YAML config file named "spec/tmp/lar_city/ddns/active.yml" with:
       """yml
       shared:
         - domain: larcity.tech
@@ -16,7 +16,7 @@ Feature: Nsx
           type: A
           ttl: 300
       """
-    Given a YAML config file named "spec/fixtures/lar_city/ddns/retired.yml" with:
+    Given a YAML config file named "spec/tmp/lar_city/ddns/retired.yml" with:
       """yml
       shared:
         - domain: larcity.dev
@@ -28,7 +28,7 @@ Feature: Nsx
           type: A
           ttl: 300
       """
-    When I successfully run the ddns update command with a custom config file
+    When I successfully run `lx-nsx ddns update --protocol=digitalocean --config=lar_city/ddns/active.yml --verbose --pretend`
     Then the output should contain "Synchronizing DDNS records..."
 
   Scenario: Update DDNS via ddclient Docker on Synology NAS with detected configuration
@@ -56,5 +56,5 @@ Feature: Nsx
           type: A
           ttl: 300
       """
-    When I successfully run the ddns update command
+    When I successfully run `lx-nsx ddns update --protocol=digitalocean --verbose --pretend`
     Then the output should contain "Synchronizing DDNS records..."
