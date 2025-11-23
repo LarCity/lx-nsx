@@ -2,7 +2,7 @@
 
 require 'thor'
 require 'awesome_print'
-require 'utils/operating_system_detectable'
+require 'lar_city/cli/utils/operating_system_detectable'
 require 'lar_city/cli/utils'
 require 'lar_city/cli/interruptible'
 require 'lar_city/cli/runnable'
@@ -15,7 +15,7 @@ module LarCity
       end
 
       no_commands do
-        include OperatingSystemDetectable
+        include Utils::OperatingSystemDetectable
         include EnvHelpers
         include OutputHelpers
       end

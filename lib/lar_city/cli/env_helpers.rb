@@ -28,7 +28,7 @@ module LarCity
       end
 
       def self.included(base)
-        base.include OperatingSystemDetectable
+        base.include Utils::OperatingSystemDetectable
 
         # Throw an error unless included in a Thor class
         missing_ancestor_msg = <<~MSG
@@ -50,7 +50,7 @@ module LarCity
         protected
 
         def detected_environment
-          options[:environment] || Rails.env
+          options[:environment] || ENV.fetch('RUBY_ENV', 'development')
         end
       end
     end

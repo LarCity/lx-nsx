@@ -63,24 +63,28 @@ module LarCity
           end
         end
 
+        def say_debug(message)
+          say(message, Colors::VERBOSE) if verbose?
+        end
+
         def say_info(message)
-          say(message, :cyan)
+          say(message, Colors::INFO)
         end
 
         def say_warning(message)
-          say(message, :yellow)
+          say(message, Colors::WARNING)
         end
 
         def say_success(message)
-          say(message, :green)
+          say(message, Colors::SUCCESS)
         end
 
         def say_highlight(message)
-          say(message, :magenta)
+          say(message, Colors::HIGHLIGHT)
         end
 
         def say_error(message)
-          say(message, :red)
+          say(message, Colors::ERROR)
         end
 
         def help?

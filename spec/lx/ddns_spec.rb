@@ -3,7 +3,7 @@
 module Lx
   module Nsx
     RSpec.describe Ddns do
-      describe '.sync' do
+      describe '.update' do
         it 'returns synchronization message' do
           expect(Lx::Nsx::Ddns.sync).to eq('Synchronizing DDNS records...')
         end

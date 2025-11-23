@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+lib = File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'lx/nsx'
+
+processed_argv =
+  if ARGV.include?('--')
+    ARGV
+  else
+    cmd, args = ARGV.partition { |arg| !arg.start_with?(/-|--/) }
+    cmd + ['--'] + args.sort
+  end
+
+Lx::Nsx::CLI.start(processed_argv)

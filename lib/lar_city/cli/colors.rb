@@ -6,10 +6,12 @@ module LarCity
   module CLI
     module Colors
       PROMPT = :cyan
-      INFO = :yellow
+      INFO = :white
+      WARNING = :yellow
       SUCCESS = :green
       ERROR = :red
       HIGHLIGHT = :magenta
+      VERBOSE = :blue
     end
   end
 end
