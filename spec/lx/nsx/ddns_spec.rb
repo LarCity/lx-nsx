@@ -5,7 +5,8 @@ module Lx
     RSpec.describe Ddns do
       let(:command) { described_class.new }
       let(:command_args) { {} }
-      let(:config_file) { 'fake_company/ddns/active.yml' }
+      let(:company_name) { 'lar_city' }
+      let(:config_file) { "#{company_name}/ddns/active.yml" }
       let(:config_content) do
         <<~YAML
           - domain: larcity.tech
@@ -34,19 +35,20 @@ module Lx
             verbose: true,
           }
         end
+        let(:expected_ddclient_config_file) do
+          File.join(Utils.spec_path(tmp: true), 'lar_city/ddclient.conf')
+        end
 
         before do
           allow(Dir).to receive(:exist?).with(File.dirname(config_file)).and_return(true)
           allow(File).to receive(:exist?).with(config_file).and_return(true)
+          allow(File).to receive(:exist?).with(expected_ddclient_config_file).and_call_original
           allow(Utils).to receive(:env_config).with(config_file, env: 'test') do
             YAML.safe_load(config_content, symbolize_names: true)
           end
         end
 
         it 'loads the configuration and synchronizes DDNS records' do
-          # with_config_file(config_file, config_content, tmp: true, verbose: true) do |file_path|
-          #   expect { operation }.not_to raise_error
-          # end
           expect { operation }.not_to raise_error
         end
       end

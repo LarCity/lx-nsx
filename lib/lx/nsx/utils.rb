@@ -44,18 +44,18 @@ module Lx
         end
 
         def detected_environment
-          env = ENV.fetch('RAILS_ENV', nil)
-          env || ENV.fetch('RUBY_ENV', 'development')
+          env = ENV.fetch('RUBY_ENV', nil)
+          env || ENV.fetch('RAILS_ENV', 'development')
         end
 
         def credentials
           # Parse credentials from config/credentials.yml.erb using ERB
           # to allow for environment variable interpolation
 
-          template_file = base_path('config/credentials.yml.erb')
+          template_file = base_path('lib/config/credentials.yml.erb')
           erb_result = ERB.new(File.read(template_file)).result
           shared, for_env =
-            YAML.load(erb_result)&.values_at 'shared', detected_environment
+            YAML.load(erb_result)&.deep_stringify_keys&.values_at 'shared', detected_environment
           (shared || {}).merge(for_env || {}).deep_symbolize_keys
         end
 

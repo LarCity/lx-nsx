@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'erb'
 require 'lar_city/cli/core_cmd'
+require 'lx/ddclient'
 require 'yaml'
 
 module Lx
@@ -32,6 +34,26 @@ module Lx
         ap data if verbose?
 
         say_info 'Synchronizing DDNS records...'
+
+        access_token = Utils.credentials.dig(options[:protocol].to_sym, :api_token)
+        data.each do |record|
+          say_info "Would update record: #{record.inspect}" if pretend?
+
+          domain, content = record.values_at(:domain, :content)
+          context = Ddclient::ConfigContext.new
+          context.protocol = options[:protocol]
+          context.hostname = domain
+          context.login = [content, domain].join('.')
+          context.password = access_token
+          # TODO: Require that the record ID be specified in the config file OR
+          #   implement logic to look up existing record ID based on domain/name/type
+          # context.record_id = record[:record_id]
+          template_content = File.read(Utils.base_path('lib/lx/ddclient/config.conf.erb'))
+          config_content = ERB.new(template_content).result(context.get_binding)
+          with_config_file('lar_city/ddclient.conf', config_content, tmp: true) do |config_file_path|
+            say_info "Using ddclient config file at: #{config_file_path}"
+          end
+        end
       end
 
       no_commands do

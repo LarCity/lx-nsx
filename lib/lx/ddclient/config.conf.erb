@@ -1,0 +1,17 @@
+# Configuration file for ddclient.
+#
+# Daemon mode for periodic updates
+daemon=300
+syslog=yes
+
+# Method to determine the public IP address
+use=web, web=checkip.dynu.com/
+
+# DigitalOcean details
+protocol=<%= protocol || "digitalocean" %>
+server=<%= server || "api.digitalocean.com" %>
+login=<%= login || domain_name %>
+password=<%= password %>
+
+# Hostname and record ID to update
+<%= hostname %>, record_id=<%= record_id %>
