@@ -7,22 +7,17 @@ require 'rspec'
 require 'aruba/cucumber'
 require_relative '../../spec/spec_helper'
 
+# TODO: Document a reference for this pattern of stubbing within a Before hook
 Before do |_scenario|
   # Implement code that will run before each scenario here
 end
 
 Around do |_scenario, block|
-  # Implement code that will run around each scenario here
-  # RSpec::Mocks.allow_message(Lx::Nsx::Utils, :env_config).with(%r{^spec/fixtures/\.*/ddns/active\.yml$}, env: 'test') do
-  #   YAML.safe_load_file(File.expand_path('../fixtures/ddns/active.yml', __dir__))
-  # end
-  #
+  # TODO: Document a reference for this pattern of stubbing within an Around hook
   RSpec::Mocks.with_temporary_scope do
-    # allow(Lx::Nsx::Utils).to \
-    #   receive(:env_config)
-    #     .with(%r{^spec/fixtures/\.*/ddns/active\.ya?ml$}, env: 'test') do
-    #       YAML.safe_load_file(File.expand_path('../fixtures/ddns/active.yml', __dir__))
-    #     end
+    # TODO: Is this stub doing anything? Don't think so. I believe the way this test suite
+    #   is currently structured, the actual config file is being used directly and created
+    #   ahead of time via Gherkin steps.
     Lx::Nsx::Utils.stub(:env_config).with(%r{^spec/fixtures/\.*/ddns/active\.ya?ml$}, env: 'test') do
       YAML.safe_load_file(File.expand_path('../fixtures/ddns/active.yml', __dir__))
     end
@@ -31,6 +26,7 @@ Around do |_scenario, block|
   end
 end
 
+# TODO: Document a reference for this pattern of stubbing within an After hook
 After do |_scenario|
   # Implement code that will run after each scenario here
 end

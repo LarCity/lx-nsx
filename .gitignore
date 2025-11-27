@@ -20,3 +20,6 @@
 
 # Ignore temporary spec files
 /spec/tmp/
+
+# Environment variables
+/.env.*

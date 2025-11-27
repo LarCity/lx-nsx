@@ -47,19 +47,12 @@ module Lx
           @config_path = Utils.infer_resource_path path
         end
 
-        # @deprecated Use Lx::Nsx::Utils.infer_resource_path instead
-        def infer_resource_path(resource_path)
-          return resource_path if Dir.exist?(resource_path) || File.exist?(resource_path)
-
-          inferred_path = resource_path.start_with?('/') ? resource_path : Lx::Nsx::Utils.base_path(resource_path)
-          return inferred_path if Dir.exist?(inferred_path) || File.exist?(inferred_path)
-
-          raise "DDNS configuration path not found: #{resource_path}"
-        end
-
         def load_config(key: :active)
           say_debug "Loading DDNS config file for key: #{key} at path: #{config_path}"
-          Utils.env_config(File.join(config_path, "#{key}.yml"), env: detected_environment)
+          raise ArgumentError, 'DDNS config path is not set' if config_path.blank?
+
+          config_file_for_key = File.join(config_path, "#{key}.yml")
+          Utils.env_config(config_file_for_key, env: detected_environment)
         end
       end
     end
