@@ -1,0 +1,20 @@
+shared:
+  - domain: <%= ENV.fetch('TEST_DEV_DOMAIN', 'larcity.dev') %>
+    content: alpha
+    type: A
+    ttl: 3600
+  - domain: <%= ENV.fetch('TEST_TECH_DOMAIN', 'larcity.tech') %>
+    content: beta
+    type: A
+    ttl: 3600
+
+test:
+  - domain: <%= ENV.fetch('TEST_FAKE_DOMAIN', 'fake.app') %>
+    content: staging
+    type: A
+    ttl: 3600
+  - domain: <%= ENV.fetch('TEST_FAKE_DOMAIN', 'fake.app') %>
+    content: mail
+    priority: 10
+    type: MX
+    ttl: 3600

@@ -1,0 +1,58 @@
+# frozen_string_literal: true
+
+require 'lar_city/cli/utils/operating_system_detectable'
+require 'lar_city/cli/utils/class_helpers'
+
+module LarCity
+  module CLI
+    module EnvHelpers
+      extend Utils::ClassHelpers
+
+      def self.define_class_options(thor_class)
+        thor_class.class_option :environment,
+                                type: :string,
+                                aliases: '--env',
+                                desc: 'Environment',
+                                required: false
+      end
+
+      def self.define_sudo_option(thor_class, type: nil, default: false, required: false)
+        option_method = type.to_s == 'class' ? :class_option : :option
+        thor_class
+          .public_send(
+            option_method, :sudo,
+            type: :boolean,
+            desc: 'Run command with sudo (only applies to Unix-based systems)',
+            default:, required:
+          )
+      end
+
+      def self.included(base)
+        base.include Utils::OperatingSystemDetectable
+
+        # Throw an error unless included in a Thor class
+        missing_ancestor_msg = <<~MSG
+          #{base.name} is not a descendant of Thor or Thor::Group.
+          #{name} can only be included in Thor or Thor::Group descendants.
+        MSG
+        raise missing_ancestor_msg unless has_thor_ancestor?(base)
+
+        missing_options_method_msg = <<~MSG
+          #{base.name} does not support options.
+          #{name} can only be included in Thor classes that support options.
+        MSG
+        raise missing_options_method_msg unless supports_options?(base)
+
+        base.include InstanceMethods
+      end
+
+      module InstanceMethods
+        protected
+
+        def detected_environment
+          options[:environment] || ENV.fetch('RUBY_ENV', 'development')
+        end
+      end
+    end
+  end
+end
