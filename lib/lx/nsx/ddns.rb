@@ -50,7 +50,8 @@ module Lx
           # context.record_id = record[:record_id]
           template_content = File.read(Utils.base_path('lib/lx/ddclient/config.conf.erb'))
           config_content = ERB.new(template_content).result(context.get_binding)
-          with_config_file('lar_city/ddclient.conf', config_content, tmp: true) do |config_file_path|
+          # TODO: Refactor with_config_file to a Utils module class method
+          with_config_file("lar_city/ddclient/#{context.login}.conf", config_content, tmp: true) do |config_file_path|
             say_info "Using ddclient config file at: #{config_file_path}"
           end
         end
