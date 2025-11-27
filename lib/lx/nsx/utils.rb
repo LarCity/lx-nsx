@@ -5,6 +5,7 @@ require 'active_support/core_ext/hash'
 require 'erb'
 require 'fileutils'
 require 'yaml'
+require 'lar_city/cli/utils/say'
 
 module Lx
   module Nsx
@@ -14,15 +15,20 @@ module Lx
       class << self
         attr_reader :config_paths
 
+        def logger
+          @logger ||= LarCity::CLI::Utils::Say.new
+        end
+
         def setup_config_paths
           unless @config_paths.blank?
-            puts "Config paths already set up: #{@config_paths.inspect}"
+            Say.info "Config paths already set up: #{@config_paths.inspect}"
             return
           end
 
-          # @config_paths ||= []
-          @config_paths << File.join(Dir.pwd, 'lib', 'config', 'ddns')
+          @config_paths << base_path('config')
           @config_paths << File.join(Dir.home, '.lx', 'nsx', 'config') if Dir.home.present?
+          @config_paths << spec_path(tmp: true)
+          @config_paths << spec_path
         end
 
         # TODO: Support custom base path via ENV variable
@@ -67,15 +73,27 @@ module Lx
         end
 
         def infer_resource_path(resource_path)
+          if Dir.exist?(resource_path) || File.exist?(resource_path)
+            logger.debug "Resource path exists as given: #{resource_path}"
+            return resource_path
+          end
+
+          if resource_path.start_with?('/')
+            logger.debug "Resource path is absolute but does not exist: #{resource_path}"
+            raise "Configuration path not found: #{resource_path}"
+          end
+
+          logger.debug "Inferring absolute resource path for: #{resource_path}"
           discovered_path = nil
           config_paths.each do |path|
             candidate_path = File.join(path, resource_path)
+            logger.debug "Checking candidate resource path: #{candidate_path}"
             if Dir.exist?(candidate_path) || File.exist?(candidate_path)
               discovered_path = candidate_path
               break
             end
           rescue => e
-            puts "Error checking config path #{candidate_path}: #{e.message}"
+            logger.error "Error checking config path #{candidate_path}: #{e.message}"
           end
           raise "Configuration path not found: #{resource_path}" if discovered_path.blank?
 

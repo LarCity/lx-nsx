@@ -2,6 +2,7 @@
 
 require 'lar_city/cli/colors'
 require 'lar_city/cli/utils/ask'
+require 'lar_city/cli/utils/say'
 require 'lar_city/cli/utils/types'
 require 'lar_city/cli/output_helpers'
 require 'lar_city/cli/env_helpers'
